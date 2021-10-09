@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { ThemeProvider } from '@mui/material/styles';
+import { Router } from "@reach/router"
+import Almacen from './pages/Almacen/Almacen';
+import Login from './pages/Login';
+import Navbar from './components/Navbar';
+import theme from './theme';
+import Inventario from './pages/Inventario/Inventario';
+import Pedidos from './pages/Pedidos/Pedidos';
+import Productos from './pages/Productos/Productos';
+import Ingreso from './pages/Ordenes/Ingreso/Ingreso';
+import moment from 'moment'
+import 'moment/locale/es'  // without this line it didn't work
 
-function App() {
+const App = () => {
+  moment.locale('es')
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  <ThemeProvider theme={theme}>
+    <Navbar/>
+    <Router>
+      <Login path="/"/>
+      <Almacen path="/almacen"/>
+      <Inventario path="/inventario"/>
+      <Pedidos path="/pedidos"/>
+      <Productos path="/productos"/>
+      <Ingreso path="/ordenes/ingreso"/>
+  </Router>
+  </ThemeProvider>
   );
 }
 
