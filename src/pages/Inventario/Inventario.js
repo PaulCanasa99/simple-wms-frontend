@@ -1,4 +1,4 @@
-import { Button, Container, FormControl, Grid, InputLabel, MenuItem, Typography } from '@mui/material';
+import { Button, Container, Grid, MenuItem, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useState, useEffect } from 'react';
 import CallReceivedIcon from '@mui/icons-material/CallReceived';
@@ -53,20 +53,13 @@ const Inventario = () => {
         	</Grid>
 					<Grid item xs={8} sx={{pt: 5, display: 'flex'}}>
 						<Grid container justifyContent="space-between">
-							<CustomTextField label="# UM"/>
-							<CustomTextField/>
-							<FormControl
-							variant="outlined"
-							sx={{ width: "300px"}}
-          		>
-								<InputLabel id="select-outlined">Horario</InputLabel>
-								<CustomSelect
-									labelId="select-outlined"
-									label="Horario"
-								>
-								<MenuItem value={'hola'}>hola</MenuItem>
-								</CustomSelect>
-          		</FormControl>
+							<CustomTextField title="# UM"/>
+							<CustomTextField title="Producto"/>
+              <CustomSelect title="Estado">
+                <MenuItem value={'organico'}>Orgánico</MenuItem>
+                <MenuItem value={'inorganico'}>Inorgánico</MenuItem>
+                <MenuItem value={'congelado'}>Congelado</MenuItem>
+              </CustomSelect>
 						</Grid>
 					</Grid>
 					<Grid item xs={4} sx={{pt: 5, display: 'flex'}}>

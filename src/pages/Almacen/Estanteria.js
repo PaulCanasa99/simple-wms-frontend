@@ -2,7 +2,7 @@ import { Button, Container, Grid, MenuItem, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from "react";
-import { parse } from 'papaparse';
+import { useParams } from "@reach/router"
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import SearchIcon from '@mui/icons-material/Search';
 import { CustomDataGrid } from '../../styles/CustomDataGrid';
@@ -11,40 +11,29 @@ import { CustomSelect } from '../../styles/CustomSelect';
 import axios from "axios";
 import moment from 'moment';
 
-const Input = styled('input')({
-  display: 'none',
-});
-
 const columns = [
-  { field: "id", headerName: "# Pedido", flex: 1.5, headerAlign: 'center', align: 'center'},
-  // { field: "cliente", headerName: "Encargado", flex: 1, headerAlign: 'center', align: 'center'},
+  { field: "code", headerName: "Ubicación", flex: 1.5, headerAlign: 'center', align: 'center'},
+  { field: "handlingUnit", headerName: "# UM", flex: 1, headerAlign: 'center', align: 'center'},
   // { field: "HUQuantity", headerName: "Cantidad unidades", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.handlingUnits.length},
-  { field: "products", headerName: "Cantidad unidades", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value.reduce((prev , curr) => prev + curr.quantity, 0)},
-  { field: "customer", headerName: "Cliente", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value.name},
-  { field: "date", headerName: "Fecha de registro", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
+  // { field: "products", headerName: "Cantidad unidades", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value.reduce((prev , curr) => prev + curr.quantity, 0)},
+  // { field: "customer", headerName: "Cliente", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value.name},
+  { field: "clasification", headerName: "Clasificación", flex: 1.5, headerAlign: 'center', align: 'center'},
   { field: "status", headerName: "Estado", flex: 1.5, headerAlign: 'center', align: 'center'},
 ];
 
-const Pedidos = () => {
+const Estanteria = () => {
   
-  const [orders, setOrders] = useState();
+  const params = useParams();
+  const [locations, setLocations] = useState();
   
   useEffect(() => {
-    axios.get(process.env.REACT_APP_API_URL + "/orders").then((r) => {
-      setOrders(r.data);
+    axios.get(`${process.env.REACT_APP_API_URL}/locations/${params.rack}`).then((r) => {
+      console.log(r.data)
+      setLocations(r.data);
     });
   }, []);
   
-  const uploadFile = async (file) => {
-    const text = await file.text();
-    const result = parse(text, {header: true});
-    axios.post(process.env.REACT_APP_API_URL + "/orders/import", result).then((r) => {
-      console.log('posted');
-    });
-    console.log(result);
-  }
-
-  if (orders) 
+  if (locations) 
   return (
 			<Container
 				sx={{
@@ -54,21 +43,18 @@ const Pedidos = () => {
 			>
 				<Grid container alignItems="center">
 					<Grid item xs={6}>
-						<Typography variant="h4">Pedidos</Typography>
+						<Typography variant="h4">Almacén - Estanteria {params.rack}</Typography>
 					</Grid>
 					<Grid item xs={6}>
 						<Grid container justifyContent="flex-end">
-              <label htmlFor="contained-button-file">
-                <Input accept="text/csv, .csv" id="contained-button-file" multiple type="file" onChange={(e) => uploadFile(e.target.files[0])}/>
-                <Button
-                  component="span"
-                  variant="contained"
-                  color="primary"
-                  startIcon={<FileUploadIcon/>}
-                >
-                  Cargar pedidos
-                </Button>
-              </label>
+              <Button
+                component="span"
+                variant="contained"
+                color="primary"
+                startIcon={<FileUploadIcon/>}
+              >
+                Volver a almacén
+              </Button>
 						</Grid>
 					</Grid>
 					<Grid item xs={8} sx={{pt: 5, display: 'flex'}}>
@@ -96,7 +82,7 @@ const Pedidos = () => {
 					</Grid>
 					<Grid item xs={12} sx={{pt: 5}}>
 						<Box sx={{height: 640, flexGrow: 1}}>
-							<CustomDataGrid rows={orders} columns={columns} pageSize={10}/>
+							<CustomDataGrid rows={locations} columns={columns} pageSize={10}/>
 						</Box>
 					</Grid>
 				</Grid>
@@ -106,4 +92,4 @@ const Pedidos = () => {
   return null;
   };
 
-  export default Pedidos;
+  export default Estanteria;
