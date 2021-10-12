@@ -34,7 +34,7 @@ const CustomCircularProgress = (props) => {
           <Typography align='center' color="text.primary" fontSize={36}>
             {`${Math.round(props.value)}%`}
           </Typography>
-          <Typography fontSize={12}>Espacios ocupados</Typography>
+          <Typography fontSize={12}>Ubicaciones ocupadas</Typography>
         </Box>
       </Box>
     </Box>

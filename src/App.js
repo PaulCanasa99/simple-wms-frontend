@@ -11,12 +11,18 @@ import Productos from './pages/Productos/Productos';
 import Ingreso from './pages/Ordenes/Ingreso/Ingreso';
 import moment from 'moment'
 import 'moment/locale/es'
+import DetallePedido from './pages/Pedidos/DetallePedido';
+import Kardex from './pages/Productos/Kardex';
+import DateAdapter from '@mui/lab/AdapterMoment';
+import { LocalizationProvider } from '@mui/lab';
+import Despacho from './pages/Ordenes/Despacho/Despacho';
 
 const App = () => {
   moment.locale('es')
 
   return (
   <ThemeProvider theme={theme}>
+    <LocalizationProvider dateAdapter={DateAdapter}>
     <Navbar/>
     <Router>
       <Login path="/"/>
@@ -24,9 +30,13 @@ const App = () => {
       <Estanteria path="/almacen/:rack"/>
       <Inventario path="/inventario"/>
       <Pedidos path="/pedidos"/>
+      <DetallePedido path="/pedidos/:idPedido"/>
       <Productos path="/productos"/>
+      <Kardex path="/productos/:idProducto"/>
       <Ingreso path="/ordenes/ingreso"/>
-  </Router>
+      <Despacho path="/ordenes/despacho"/>
+    </Router>
+    </LocalizationProvider>
   </ThemeProvider>
   );
 }

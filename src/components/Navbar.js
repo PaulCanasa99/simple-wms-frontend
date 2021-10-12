@@ -16,7 +16,6 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
-    console.log('hola');
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {

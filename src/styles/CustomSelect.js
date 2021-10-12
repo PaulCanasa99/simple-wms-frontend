@@ -12,7 +12,7 @@ export const CustomSelect = (props) => {
 	return (
 		<Box>
 			<Typography sx={{color: 'white'}}>{props.title}</Typography>
-			<StyledSelect>{props.children}</StyledSelect>
+			<StyledSelect value={props.value} onChange={props.onChange}>{props.children}</StyledSelect>
 		</Box>
 	)
 }
