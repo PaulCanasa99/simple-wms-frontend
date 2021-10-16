@@ -118,7 +118,7 @@ const Productos = () => {
 					</Grid>
 					<Grid item xs={12} sx={{pt: 5}}>
 						<Box sx={{height: 640, flexGrow: 1}}>
-							<CustomDataGrid disableColumnMenu rows={filtered} columns={columns} pageSize={10} />
+							<CustomDataGrid hideFooterSelectedRowCount disableColumnMenu rows={filtered} columns={columns} pageSize={10} />
 						</Box>
 					</Grid>
 				</Grid>

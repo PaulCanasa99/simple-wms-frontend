@@ -6,11 +6,17 @@ export const CustomDataGrid = styled(DataGrid)(({theme}) => ({
 	'& .MuiDataGrid-row:nth-child(odd)': {
 		'& .MuiDataGrid-cell': {
 			backgroundColor: theme.palette.white,
+      '&:focus': {
+        outlineWidth: '0',
+      }
 		},
 	},
 	'& .MuiDataGrid-row:nth-child(even)': {
 		'& .MuiDataGrid-cell': {
 			backgroundColor: theme.palette.secondary.light,
+      '&:focus': {
+        outlineWidth: '0',
+      }
 		},
 	},
 	'& .MuiDataGrid-row:last-child': {

@@ -12,6 +12,7 @@ const Almacen = () => {
   const map = [];
   const navigate = useNavigate();
   const [locations, setLocations] = useState();
+  const [handlingUnits, setHandlingUnits] = useState();
 
   const getLetter = (index) => {
     if (index === 0) return '';
@@ -40,6 +41,12 @@ const Almacen = () => {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/locations`).then((r) => {
       setLocations(r.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/handlingUnits`).then((r) => {
+      setHandlingUnits(r.data);
     });
   }, []);
 
@@ -100,11 +107,11 @@ const Almacen = () => {
           <Box sx={{p: '20px 40px'}}>
             <Box display='flex' mb={2} sx={{justifyContent: 'space-between'}}>
               <Typography sx={{fontSize: 14, fontWeight: '500'}}>Unidades a recepcionar</Typography>
-              <Typography sx={{fontSize: 14}}>400</Typography>
+              <Typography sx={{fontSize: 14}}>{handlingUnits ? handlingUnits.filter((handlingUnit) => handlingUnit.status === 'Registrado').length : '-'}</Typography>
             </Box>
             <Box display='flex' mb={2} sx={{justifyContent: 'space-between'}}>
               <Typography sx={{fontSize: 14, fontWeight: '500'}}>Unidades a despachar</Typography>
-              <Typography sx={{fontSize: 14}}>400</Typography>
+              <Typography sx={{fontSize: 14}}>{handlingUnits ? handlingUnits.filter((handlingUnit) => handlingUnit.status === 'Reservado').length : '-'}</Typography>
             </Box>
             <Box display='flex' mb={2} sx={{justifyContent: 'space-between'}}>
               <Typography sx={{fontSize: 14, fontWeight: '500'}}>Ubicaciones libres</Typography>
@@ -124,7 +131,7 @@ const Almacen = () => {
           <Box height={25} width={25} bgcolor='white'></Box>
           <Typography m={'0 20px'} color='white'>Disponible</Typography>
           <Box height={25} width={25} bgcolor='secondary.light'></Box>
-          <Typography m={'0 20px'} color='white'>Parcialment ocupado</Typography>
+          <Typography m={'0 20px'} color='white'>Parcialmente ocupado</Typography>
           <Box height={25} width={25} bgcolor='primary.main'></Box>
           <Typography m={'0 20px'} color='white'>Ocupado</Typography>
         </Box>

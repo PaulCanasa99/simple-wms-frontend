@@ -9,8 +9,10 @@ import { useNavigate } from "@reach/router"
 
 const columns = [
   { field: "code", headerName: "Ubicación", flex: 1, headerAlign: 'center', align: 'center'},
+  { field: "handlingUnitCode", headerName: "# UM", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.handlingUnit ? data.row.handlingUnit.id.substring(21, 24) : '-'},
   { field: "productCode", headerName: "Codigo producto", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.handlingUnit ? data.row.handlingUnit.product.code : '-'},
   { field: "handlingUnit", headerName: "Nombre producto", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value ? data.value.product.name : '-' },
+  { field: "productRotation", headerName: "Rotación ABC", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.handlingUnit ? data.row.handlingUnit.product.rotation : '-'},
   { field: "clasification", headerName: "Clasificación", flex: 1.5, headerAlign: 'center', align: 'center'},
   { field: "status", headerName: "Estado", flex: 1.5, headerAlign: 'center', align: 'center'},
 ];
@@ -53,7 +55,7 @@ const Estanteria = () => {
 					</Grid>
 					<Grid item xs={12} sx={{pt: 5}}>
 						<Box sx={{height: 640, flexGrow: 1}}>
-							<CustomDataGrid hideFooterPagination rows={locations} columns={columns} pageSize={10} disableColumnMenu/>
+							<CustomDataGrid hideFooterSelectedRowCount hideFooterPagination rows={locations} columns={columns} pageSize={10} disableColumnMenu/>
 						</Box>
 					</Grid>
 				</Grid>

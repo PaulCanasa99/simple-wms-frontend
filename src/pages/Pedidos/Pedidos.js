@@ -71,8 +71,12 @@ const Pedidos = () => {
   const uploadFile = async (file) => {
     const text = await file.text();
     const result = parse(text, {header: true});
-    axios.post(process.env.REACT_APP_API_URL + "/orders/import", result).then((r) => {
+    await axios.post(process.env.REACT_APP_API_URL + "/orders/import", result).then((r) => {
       setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
+    });
+    axios.get(process.env.REACT_APP_API_URL + "/orders").then((r) => {
+      setOrders(r.data);
+      setFiltered(r.data);
     });
   }
 
@@ -130,7 +134,7 @@ const Pedidos = () => {
 					</Grid>
 					<Grid item xs={12} sx={{pt: 5}}>
 						<Box sx={{height: 640, flexGrow: 1}}>
-							<CustomDataGrid rows={filtered} columns={columns} pageSize={10}/>
+							<CustomDataGrid hideFooterSelectedRowCount rows={filtered} columns={columns} pageSize={10}/>
 						</Box>
 					</Grid>
 				</Grid>

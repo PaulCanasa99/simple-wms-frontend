@@ -7,17 +7,26 @@ import { CustomTextField } from '../../../styles/CustomTextField';
 import { CustomSelect } from '../../../styles/CustomSelect';
 import axios from "axios";
 import moment from 'moment';
+import { GridActionsCellItem } from '@mui/x-data-grid';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useNavigate } from "@reach/router"
 
-const columns = [
-  { field: "id", headerName: "# Orden", flex: 1.5, headerAlign: 'center', align: 'center'},
-  { field: "HUQuantity", headerName: "Cantidad unidades", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.handlingUnits.length},
-  { field: "date", headerName: "Fecha de registro", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
-  { field: "status", headerName: "Estado", flex: 1, headerAlign: 'center', align: 'center'},
-];
-  
+
 const Despacho = () => {
+  const navigate = useNavigate();
   const [outboundOrders, setOutboundOrders] = useState();
 
+  const columns = [
+    { field: "id", headerName: "# Orden", flex: 1.5, headerAlign: 'center', align: 'center'},
+    { field: "HUQuantity", headerName: "Cantidad unidades", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.handlingUnits.length},
+    { field: "date", headerName: "Fecha de registro", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
+    { field: "status", headerName: "Estado", flex: 1, headerAlign: 'center', align: 'center'},
+    { field: 'actions', headerName: "Ver detalle", flex: 0.8, type: 'actions', getActions: (params) => [
+      <GridActionsCellItem icon={<ArrowForwardIcon/>} onClick={() => navigate(`despacho/${params.id}`)} label="Ver detalle"/>,
+      ]
+    }
+  ];
+  
   useEffect(() => {
     axios.get(process.env.REACT_APP_API_URL + "/outboundOrders").then((r) => {
       setOutboundOrders(r.data);

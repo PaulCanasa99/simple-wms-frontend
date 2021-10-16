@@ -10,20 +10,10 @@ import { CustomSelect } from '../../styles/CustomSelect';
 import axios from 'axios';
 import moment from 'moment';
 import CustomSnackbar from '../../components/CustomSnackbar';
+import { useNavigate } from "@reach/router"
 
-const columns = [
-	{ field: "id", headerName: "# UM", flex: 2, headerAlign: 'center', align: 'center'},
-  { field: "productCode", headerName: "Producto", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.product.code},
-  { field: "productsPerHU", headerName: "Cantidad", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.product.productsPerHU},
-  { field: "location", headerName: "Ubicación", flex: 1, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value ? data.value.code : '-',
-    sortComparator: (v1, v2) => v1 && v2 && v1.code < v2.code ? -1 : 1
-  },
-  { field: "entryDate", headerName: "Fecha de ingreso", flex: 2, headerAlign: 'center', align: 'center', valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
-  { field: "expirationDate", headerName: "Fecha de expiración", flex: 2, headerAlign: 'center', align: 'center',  valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
-  { field: "status", headerName: "Estado", flex: 1.5, headerAlign: 'center', align: 'center'},
-];
-  
 const Inventario = () => {
+  const navigate = useNavigate();
   const [unidadesManipulacion, setUnidadesManipulacion] = useState();
   const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
   const [filtered, setFiltered] = useState();
@@ -32,10 +22,10 @@ const Inventario = () => {
   const [UMSearch, setUMSearch] = useState('');
   const [selectionModel, setSelectionModel] = useState([]);
   const [loading, setLoading] = useState(false);
-
   
   useEffect(() => {
     axios.get(process.env.REACT_APP_API_URL + "/handlingUnits").then((r) => {
+      console.log(r.data);
       setUnidadesManipulacion(r.data);
       setFiltered(r.data);
     });
@@ -47,6 +37,19 @@ const Inventario = () => {
     //  eslint-disable-next-line
   }, [statusSelected, productSearch, UMSearch]);
   
+  const columns = [
+    { field: "id", headerName: "# UM", flex: 1, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value.substring(21, 24)},
+    { field: "productCode", headerName: "Producto", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.product.code},
+    { field: "productClasification", headerName: "Clasificación", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.product.clasification},
+    { field: "location", headerName: "Ubicación", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.location ? 
+      <Typography sx={{cursor: 'pointer'}} fontWeight={600} onClick={() => navigate(`almacen/${data.row.location.code.substring(0,2)}`) }>{data.row.location.code}</Typography>  : '-',
+      sortComparator: (v1, v2) => v1 && v2 && v1.code < v2.code ? -1 : 1
+    },
+    { field: "entryDate", headerName: "Fecha de ingreso", flex: 2, headerAlign: 'center', align: 'center', valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
+    { field: "expirationDate", headerName: "Fecha de expiración", flex: 2, headerAlign: 'center', align: 'center',  valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
+    { field: "status", headerName: "Estado", flex: 1.5, headerAlign: 'center', align: 'center'},
+  ];
+
   const search = () => {
     let query = unidadesManipulacion;
     query = query.filter((unidadManipulacion) => statusSelected === 'Todos' || unidadManipulacion.status === statusSelected);
@@ -71,6 +74,7 @@ const Inventario = () => {
       axios.get(process.env.REACT_APP_API_URL + "/handlingUnits").then((r) => {
         setUnidadesManipulacion(r.data);
         setFiltered(r.data);
+        clear();
         setLoading(false);
       });
     }

@@ -11,36 +11,46 @@ import { CustomSelect } from '../../../styles/CustomSelect';
 import CustomSnackbar from '../../../components/CustomSnackbar';
 import axios from "axios";
 import moment from 'moment';
+import { GridActionsCellItem } from '@mui/x-data-grid';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useNavigate } from "@reach/router"
 
 const Input = styled('input')({
   display: 'none',
 });
-
-const columns = [
-  { field: "id", headerName: "# Orden", flex: 1.5, headerAlign: 'center', align: 'center'},
-  { field: "warehouseWorker", headerName: "Encargado", flex: 1, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value ?? '-'},
-  { field: "HUQuantity", headerName: "Cantidad unidades", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.handlingUnits.length},
-  { field: "date", headerName: "Fecha de registro", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
-  { field: "status", headerName: "Estado", flex: 1, headerAlign: 'center', align: 'center'},
-];
   
 const Ingreso = () => {
+  const navigate = useNavigate();
   const [inboundOrders, setInboundOrders] = useState();
   const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
+
+  const columns = [
+    { field: "id", headerName: "# Orden", flex: 1.5, headerAlign: 'center', align: 'center'},
+    { field: "warehouseWorker", headerName: "Encargado", flex: 1, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value ?? '-'},
+    { field: "HUQuantity", headerName: "Cantidad unidades", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.handlingUnits.length},
+    { field: "date", headerName: "Fecha de registro", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
+    { field: "status", headerName: "Estado", flex: 1, headerAlign: 'center', align: 'center'},
+    { field: 'actions', headerName: "Ver detalle", flex: 0.8, type: 'actions', getActions: (params) => [
+      <GridActionsCellItem icon={<ArrowForwardIcon/>} onClick={() => navigate(`ingreso/${params.id}`)} label="Ver detalle"/>,
+      ]
+    }
+  ];
 
   useEffect(() => {
     axios.get(process.env.REACT_APP_API_URL + "/inboundOrders").then((r) => {
       setInboundOrders(r.data);
     });
   }, []);
-  
+
   const uploadFile = async (file) => {
     const text = await file.text();
     const result = parse(text, {header: true});
     axios.post(process.env.REACT_APP_API_URL + "/inboundOrders/import", result).then((r) => {
       setAlert({isOpen: true, message: 'Órdenes cargadas de manera exitosa.', type: 'success'})
+      axios.get(process.env.REACT_APP_API_URL + "/inboundOrders").then((r) => {
+        setInboundOrders(r.data);
+      });
     });   
-    console.log(result);
   }
 
   if (inboundOrders) 
@@ -95,7 +105,7 @@ const Ingreso = () => {
 					</Grid>
 					<Grid item xs={12} sx={{pt: 5}}>
 						<Box sx={{height: 640, flexGrow: 1}}>
-							<CustomDataGrid rows={inboundOrders} columns={columns} pageSize={10}/>
+							<CustomDataGrid hideFooterSelectedRowCount rows={inboundOrders} columns={columns} pageSize={10}/>
 						</Box>
 					</Grid>
 				</Grid>

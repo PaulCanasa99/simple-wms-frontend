@@ -1,16 +1,14 @@
 import { Button, Container, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from "react";
-import { CustomDataGrid } from '../../styles/CustomDataGrid';
+import { CustomDataGrid } from '../../../styles/CustomDataGrid';
 import axios from "axios";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
-import DetailHeader from '../../components/DetailHeader';
+import DetailHeader from '../../../components/DetailHeader';
 import { useParams } from "@reach/router"
 import moment from 'moment';
 import { useNavigate } from "@reach/router"
-import CustomSnackbar from '../../components/CustomSnackbar';
-import { LoadingButton } from '@mui/lab';
+import CustomSnackbar from '../../../components/CustomSnackbar';
 
 const columns = [
   { field: "posNumber", headerName: "Posición", flex: 0.5, headerAlign: 'center', align: 'center'},
@@ -21,37 +19,23 @@ const columns = [
   { field: "status", headerName: "Estado", flex: 1, headerAlign: 'center', align: 'center'}
 ];
 
-const DetallePedido = () => {
+const DetalleIngreso = () => {
   
   const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
   const [order, setOrder] = useState();
-  const [selectionModel, setSelectionModel] = useState([]);
-  const [loading, setLoading] = useState(false);
   const params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/orders/${params.idPedido}`).then((r) => {
-      const order = r.data;
-      order.products = order.products.map((product, index) => 
-        ({...product, id: product._id, posNumber: index + 1}));
-      setOrder(order);
+    axios.get(`${process.env.REACT_APP_API_URL}/inboundOrders/${params.idOrden}`).then((r) => {
+      console.log(params.idOrden);
+      const inboundOrder = r.data;
+      console.log(r.data);
+      inboundOrder.handlingUnits = inboundOrder.handlingUnits.map((handlingUnit, index) => 
+        ({...handlingUnit, posNumber: index + 1}));
+      setOrder(inboundOrder);
     });
-  }, [params.idPedido]);
-
-  const despacho = async () => {
-    setLoading(true);
-    await axios.post(`${process.env.REACT_APP_API_URL}/orders/outboundSelection/${params.idPedido}`, {data: selectionModel}).then((r) => {
-      setAlert({isOpen: true, message: `Selección de unidades a despachar exitosa`, type: 'success'})
-    });
-    axios.get(`${process.env.REACT_APP_API_URL}/orders/${params.idPedido}`).then((r) => {
-      const order = r.data;
-      order.products = order.products.map((product, index) => 
-        ({...product, id: product._id, posNumber: index + 1}));
-      setOrder(order);
-      setLoading(false);
-    });
-  }
+  }, [params.idOrden]);
 
   if (order) 
   return (
@@ -67,24 +51,13 @@ const DetallePedido = () => {
 					</Grid>
 					<Grid item xs={6}>
 						<Grid container justifyContent="flex-end">
-             <LoadingButton
-                loading={loading}
-                onClick={despacho}
-                sx={{mr: 3}}
-								variant="contained"
-								color="primary"
-								startIcon={<FactCheckIcon/>}
-                loadingPosition="start"
-							>
-								Despachar unidades
-							</LoadingButton>
               <Button
                 onClick={() => navigate(-1)}
                 variant="contained"
                 color="primary"
                 startIcon={<ArrowBackIcon/>}
               >
-                Ver pedidos
+                Ver órdenes de ingreso
               </Button>
 						</Grid>
 					</Grid>
@@ -92,14 +65,8 @@ const DetallePedido = () => {
             <Grid container p={3} sx={{boxShadow: 3, borderRadius: 1}} bgcolor='white'>
               <Grid item xs={6} p={'0px 100px'}>
                 <DetailHeader label='# Pedido:' value={order._id}/>
-                <DetailHeader label='Cliente:' value={order.customer.name}/>
                 <DetailHeader label='Fecha de registro:' value={moment(order.date).format('D [de] MMMM YYYY')}/>
                 <DetailHeader label='Estado:' value={order.status}/>
-              </Grid>
-              <Grid item xs={6} p={'0px 100px'}>
-                <DetailHeader label='Nombre del contacto:' value={order.customer.contactName}/>
-                <DetailHeader label='Teléfono del contacto:' value={order.customer.contactPhoneNumber}/>
-                <DetailHeader label='Dirección:' value={order.customer.address}/>
               </Grid>
             </Grid>
 					</Grid>
@@ -107,15 +74,9 @@ const DetallePedido = () => {
 						<Box sx={{height: 640, flexGrow: 1}}>
 							<CustomDataGrid 
                 disableColumnMenu
-                checkboxSelection
-                rows={order.products}
+                rows={order.handlingUnits}
                 columns={columns}
                 pageSize={10}
-                isRowSelectable={(params) => params.row.quantity <= params.row.stock && params.row.status === 'Pendiente'}
-                onSelectionModelChange={(newSelectionModel) => {
-                  setSelectionModel(newSelectionModel);
-                }}
-                selectionModel={selectionModel}
                 />
 						</Box>
 					</Grid>
@@ -127,4 +88,4 @@ const DetallePedido = () => {
   return null;
   };
 
-  export default DetallePedido;
+  export default DetalleIngreso;
