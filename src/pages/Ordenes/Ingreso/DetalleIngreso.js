@@ -47,7 +47,7 @@ const DetalleIngreso = () => {
 			>
 				<Grid container alignItems="center">
 					<Grid item xs={6}>
-						<Typography variant="h4">Pedidos</Typography>
+						<Typography variant="h4">Órden de ingreso</Typography>
 					</Grid>
 					<Grid item xs={6}>
 						<Grid container justifyContent="flex-end">

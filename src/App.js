@@ -2,7 +2,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { Router } from "@reach/router"
 import Almacen from './pages/Almacen/Almacen';
 import Estanteria from './pages/Almacen/Estanteria';
-// import Login from './pages/Login';
+import Login from './pages/Login';
 import Navbar from './components/Navbar';
 import theme from './theme';
 import Inventario from './pages/Inventario/Inventario';
@@ -18,6 +18,7 @@ import { LocalizationProvider } from '@mui/lab';
 import Despacho from './pages/Ordenes/Despacho/Despacho';
 import DetalleIngreso from './pages/Ordenes/Ingreso/DetalleIngreso';
 import DetalleDespacho from './pages/Ordenes/Despacho/DetalleDespacho';
+import Transporte from './pages/Ordenes/Trasnporte/Transporte';
 
 const App = () => {
   moment.locale('es')
@@ -27,7 +28,7 @@ const App = () => {
     <LocalizationProvider dateAdapter={DateAdapter}>
     <Navbar/>
     <Router>
-      <Almacen path="/"/>
+      <Login path="/"/>
       <Almacen path="/almacen"/>
       <Estanteria path="/almacen/:rack"/>
       <Inventario path="/inventario"/>
@@ -39,6 +40,7 @@ const App = () => {
       <DetalleIngreso path="/ordenes/ingreso/:idOrden"/>
       <Despacho path="/ordenes/despacho"/>
       <DetalleDespacho path="/ordenes/despacho/:idOrden"/>
+      <Transporte path="/ordenes/transporte"/>
     </Router>
     </LocalizationProvider>
   </ThemeProvider>

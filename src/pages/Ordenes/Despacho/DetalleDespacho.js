@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { CustomDataGrid } from '../../../styles/CustomDataGrid';
 import axios from "axios";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
 import DetailHeader from '../../../components/DetailHeader';
 import { useParams } from "@reach/router"
 import moment from 'moment';
@@ -14,8 +15,6 @@ const columns = [
   { field: "posNumber", headerName: "Posición", flex: 0.5, headerAlign: 'center', align: 'center'},
   { field: "productCode", headerName: "Código", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.product.code},
   { field: "productName", headerName: "Nombre", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.product.name},
-  { field: "quantity", headerName: "Cantidad UM", flex: 1, headerAlign: 'center', align: 'center'},
-  { field: "stock", headerName: "Stock disponible UM", flex: 1, headerAlign: 'center', align: 'center'},
   { field: "status", headerName: "Estado", flex: 1, headerAlign: 'center', align: 'center'}
 ];
 
@@ -24,15 +23,12 @@ const DetalleDespacho = () => {
   const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
   const [order, setOrder] = useState();
   const [selectionModel, setSelectionModel] = useState([]);
-  const [loading, setLoading] = useState(false);
   const params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/outboundOrders/${params.idOrden}`).then((r) => {
-      console.log(params.idOrden);
       const inboundOrder = r.data;
-      console.log(r.data);
       inboundOrder.handlingUnits = inboundOrder.handlingUnits.map((handlingUnit, index) => 
         ({...handlingUnit, posNumber: index + 1}));
       setOrder(inboundOrder);
@@ -40,16 +36,8 @@ const DetalleDespacho = () => {
   }, [params.idOrden]);
 
   const despacho = async () => {
-    setLoading(true);
-    await axios.post(`${process.env.REACT_APP_API_URL}/orders/outboundSelection/${params.idPedido}`, {data: selectionModel}).then((r) => {
+    await axios.post(`${process.env.REACT_APP_API_URL}/outboundOrders/generateTransportOrders/${params.idOrden}`, {data: selectionModel}).then((r) => {
       setAlert({isOpen: true, message: `Selección de unidades a despachar exitosa`, type: 'success'})
-    });
-    axios.get(`${process.env.REACT_APP_API_URL}/orders/${params.idPedido}`).then((r) => {
-      const order = r.data;
-      order.products = order.products.map((product, index) => 
-        ({...product, id: product._id, posNumber: index + 1}));
-      setOrder(order);
-      setLoading(false);
     });
   }
 
@@ -63,10 +51,19 @@ const DetalleDespacho = () => {
 			>
 				<Grid container alignItems="center">
 					<Grid item xs={6}>
-						<Typography variant="h4">Órdenes de despacho</Typography>
+						<Typography variant="h4">Órden de despacho</Typography>
 					</Grid>
 					<Grid item xs={6}>
 						<Grid container justifyContent="flex-end">
+              <Button
+                onClick={despacho}
+                sx={{mr: 3}}
+								variant="contained"
+								color="primary"
+								startIcon={<FactCheckIcon/>}
+							>
+								Despachar unidades
+							</Button>
               <Button
                 onClick={() => navigate(-1)}
                 variant="contained"
@@ -93,6 +90,12 @@ const DetalleDespacho = () => {
                 rows={order.handlingUnits}
                 columns={columns}
                 pageSize={10}
+                checkboxSelection
+                isRowSelectable={(params) => params.row.status === 'Reservado'}
+                onSelectionModelChange={(newSelectionModel) => {
+                  setSelectionModel(newSelectionModel);
+                }}
+                selectionModel={selectionModel}
                 />
 						</Box>
 					</Grid>

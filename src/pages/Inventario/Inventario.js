@@ -52,6 +52,7 @@ const Inventario = () => {
 
   const search = () => {
     let query = unidadesManipulacion;
+    console.log(query);
     query = query.filter((unidadManipulacion) => statusSelected === 'Todos' || unidadManipulacion.status === statusSelected);
     query = query.filter((unidadManipulacion) => unidadManipulacion.product.code.includes(productSearch));
     query = query.filter((unidadManipulacion) => unidadManipulacion.id.includes(UMSearch));
