@@ -30,7 +30,7 @@ const Pedidos = () => {
   const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
 
   const columns = [
-    { field: "id", headerName: "# Pedido", flex: 1.5, headerAlign: 'center', align: 'center'},
+    { field: "orderId", headerName: "# Pedido", flex: 1.5, headerAlign: 'center', align: 'center'},
     { field: "products", headerName: "Cantidad unidades", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value.reduce((prev , curr) => prev + curr.quantity, 0)},
     { field: "customer", headerName: "Cliente", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value.name},
     { field: "date", headerName: "Fecha de registro", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
@@ -71,12 +71,12 @@ const Pedidos = () => {
   const uploadFile = async (file) => {
     const text = await file.text();
     const result = parse(text, {header: true});
-    await axios.post(process.env.REACT_APP_API_URL + "/orders/import", result).then((r) => {
+    axios.post(process.env.REACT_APP_API_URL + "/orders/import", result).then((r) => {
+      axios.get(process.env.REACT_APP_API_URL + "/orders").then((r) => {
+        setOrders(r.data);
+        setFiltered(r.data);
+      });
       setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
-    });
-    axios.get(process.env.REACT_APP_API_URL + "/orders").then((r) => {
-      setOrders(r.data);
-      setFiltered(r.data);
     });
   }
 

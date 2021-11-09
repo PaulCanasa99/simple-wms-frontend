@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "@reach/router"
 import axios from "axios";
 
-const maxX = 16;
+const maxX = 17;
 const maxY = 16;
 
 const Almacen = () => {
@@ -42,6 +42,12 @@ const Almacen = () => {
     axios.get(`${process.env.REACT_APP_API_URL}/locations`).then((r) => {
       setLocations(r.data);
     });
+    const interval = setInterval(() => {
+      axios.get(`${process.env.REACT_APP_API_URL}/locations`).then((r) => {
+        setLocations(r.data);
+      });
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -93,6 +99,17 @@ const Almacen = () => {
             <Typography sx={{color: 'white', fontSize: 14}}>Zona de recepción y despacho</Typography>
           </Box>
           <Box pl={8}>
+            <Box display='flex' item xs={8} mb={2} pl={5}>
+              <Box border='1px solid' borderColor='secondary.light' width='250px' mr={5}>
+                <Typography align='center' color='white'>Orgánico</Typography>
+              </Box>
+              <Box border='1px solid' borderColor='secondary.light' width='250px' mr={5}>
+                <Typography align='center' color='white'>Inorgánico</Typography>
+              </Box>
+              <Box border='1px solid' borderColor='secondary.light' width='145px'>
+                <Typography align='center' color='white'>Congelado</Typography>
+              </Box>
+            </Box>
             {map}
           </Box>
         </Grid>
@@ -105,13 +122,17 @@ const Almacen = () => {
           </Box>
           <Divider variant='middle' sx={{bgcolor: 'secondary.light'}}/>
           <Box sx={{p: '20px 40px'}}>
+          <Box display='flex' mb={2} sx={{justifyContent: 'space-between'}}>
+              <Typography sx={{fontSize: 14, fontWeight: '500'}}>Unidades en inspección</Typography>
+              <Typography sx={{fontSize: 14}}>{handlingUnits ? handlingUnits.filter((handlingUnit) => handlingUnit.status === 'En inspección').length : '-'}</Typography>
+            </Box>
             <Box display='flex' mb={2} sx={{justifyContent: 'space-between'}}>
               <Typography sx={{fontSize: 14, fontWeight: '500'}}>Unidades a recepcionar</Typography>
               <Typography sx={{fontSize: 14}}>{handlingUnits ? handlingUnits.filter((handlingUnit) => handlingUnit.status === 'Registrado').length : '-'}</Typography>
             </Box>
             <Box display='flex' mb={2} sx={{justifyContent: 'space-between'}}>
               <Typography sx={{fontSize: 14, fontWeight: '500'}}>Unidades a despachar</Typography>
-              <Typography sx={{fontSize: 14}}>{handlingUnits ? handlingUnits.filter((handlingUnit) => handlingUnit.status === 'Reservado').length : '-'}</Typography>
+              <Typography sx={{fontSize: 14}}>{handlingUnits ? handlingUnits.filter((handlingUnit) => handlingUnit.status === 'Por despachar').length : '-'}</Typography>
             </Box>
             <Box display='flex' mb={2} sx={{justifyContent: 'space-between'}}>
               <Typography sx={{fontSize: 14, fontWeight: '500'}}>Ubicaciones libres</Typography>

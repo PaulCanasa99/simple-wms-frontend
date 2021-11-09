@@ -4,7 +4,7 @@ import { CustomMenu } from "../styles/CustomMenu";
 import { Link } from "@reach/router"
 import { styled, Box } from '@mui/system';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import HouseIcon from '@mui/icons-material/House';
+import logo from '../assets/warehouse.svg';
 
 const CustomLink = styled(Link)({
   color: '#FFF',
@@ -26,8 +26,8 @@ const Navbar = () => {
   return (
     <AppBar sx={{ padding: "5px 190px", position: "static"}}>
       <Toolbar sx={{ width: "80%" }}>
-        <HouseIcon sx={{fontSize: '50px', marginRight: '15px'}}/>
-        <Typography variant="h5" sx={{ flexGrow: 1 }}>
+        <img src={logo} alt='logo'/>
+        <Typography variant="h5" sx={{ flexGrow: 1 }} ml={3}>
           <Link
             to="/almacen"
             style={{ color: "#FFF", textDecoration: "none" }}

@@ -33,6 +33,7 @@ const DetallePedido = () => {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/orders/${params.idPedido}`).then((r) => {
       const order = r.data;
+      console.log(r.data);
       order.products = order.products.map((product, index) => 
         ({...product, id: product._id, posNumber: index + 1}));
       setOrder(order);
@@ -91,7 +92,7 @@ const DetallePedido = () => {
           <Grid item xs={12} mt={3}>
             <Grid container p={3} sx={{boxShadow: 3, borderRadius: 1}} bgcolor='white'>
               <Grid item xs={6} p={'0px 100px'}>
-                <DetailHeader label='# Pedido:' value={order._id}/>
+                <DetailHeader label='# Pedido:' value={order.orderId}/>
                 <DetailHeader label='Cliente:' value={order.customer.name}/>
                 <DetailHeader label='Fecha de registro:' value={moment(order.date).format('D [de] MMMM YYYY')}/>
                 <DetailHeader label='Estado:' value={order.status}/>

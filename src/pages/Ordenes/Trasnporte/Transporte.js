@@ -13,7 +13,9 @@ const Transporte = () => {
   const [transportOrders, setTransportOrders] = useState();
 
   const columns = [
-    { field: "id", headerName: "# Orden", flex: 1.5, headerAlign: 'center', align: 'center'},
+    { field: "transportOrderId", headerName: "# Orden", flex: 1, headerAlign: 'center', align: 'center'},
+    { field: "handlingUnit", headerName: "# UM", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value.handlingUnitId},
+    { field: "product", headerName: "Producto", flex: 1.5, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.handlingUnit.product.name},
     { field: "type", headerName: "Tipo", flex: 1.5, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.inboundOrder ? 'Ingreso' : 'Despacho'},
     { field: "date", headerName: "Fecha de registro", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
     { field: "status", headerName: "Estado", flex: 1, headerAlign: 'center', align: 'center'},
@@ -23,6 +25,12 @@ const Transporte = () => {
     axios.get(process.env.REACT_APP_API_URL + "/transportOrders").then((r) => {
       setTransportOrders(r.data);
     });
+    const interval = setInterval(() => {
+      axios.get(process.env.REACT_APP_API_URL + "/transportOrders").then((r) => {
+        setTransportOrders(r.data);
+      });
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
   
   if (transportOrders) 
@@ -40,11 +48,11 @@ const Transporte = () => {
 					<Grid item xs={8} sx={{pt: 5, display: 'flex'}}>
 						<Grid container justifyContent="space-between">
 							<CustomTextField title="# Orden"/>
-							<CustomTextField title="Encargado"/>
+							<CustomTextField title="# UM"/>
               <CustomSelect title="Estado">
-                <MenuItem value={'organico'}>Orgánico</MenuItem>
-                <MenuItem value={'inorganico'}>Inorgánico</MenuItem>
-                <MenuItem value={'congelado'}>Congelado</MenuItem>
+                <MenuItem value={'Todos'}>Todos</MenuItem>
+                <MenuItem value={'Pendiente'}>Pendiente</MenuItem>
+                <MenuItem value={'Finalizado'}>Finalizado</MenuItem>
               </CustomSelect>
 						</Grid>
 					</Grid>
@@ -62,7 +70,7 @@ const Transporte = () => {
 					</Grid>
 					<Grid item xs={12} sx={{pt: 5}}>
 						<Box sx={{height: 640, flexGrow: 1}}>
-							<CustomDataGrid rows={transportOrders} columns={columns} pageSize={10}/>
+							<CustomDataGrid hideFooterSelectedRowCount rows={transportOrders} columns={columns} pageSize={10}/>
 						</Box>
 					</Grid>
 				</Grid>

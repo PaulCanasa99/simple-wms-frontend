@@ -25,12 +25,12 @@ const Ingreso = () => {
   const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
 
   const columns = [
-    { field: "id", headerName: "# Orden", flex: 1.5, headerAlign: 'center', align: 'center'},
-    { field: "warehouseWorker", headerName: "Encargado", flex: 1, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value ?? '-'},
+    { field: "inboundOrderId", headerName: "# Orden", flex: 1, headerAlign: 'center', align: 'center'},
+    // { field: "warehouseWorker", headerName: "Encargado", flex: 1, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value ?? '-'},
     { field: "HUQuantity", headerName: "Cantidad unidades", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.handlingUnits.length},
     { field: "date", headerName: "Fecha de registro", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
     { field: "status", headerName: "Estado", flex: 1, headerAlign: 'center', align: 'center'},
-    { field: 'actions', headerName: "Ver detalle", flex: 0.8, type: 'actions', getActions: (params) => [
+    { field: 'actions', headerName: "Ver detalle", flex: 1, type: 'actions', getActions: (params) => [
       <GridActionsCellItem icon={<ArrowForwardIcon/>} onClick={() => navigate(`ingreso/${params.id}`)} label="Ver detalle"/>,
       ]
     }
@@ -85,9 +85,10 @@ const Ingreso = () => {
 							<CustomTextField title="# Orden"/>
 							<CustomTextField title="Encargado"/>
               <CustomSelect title="Estado">
-                <MenuItem value={'organico'}>Orgánico</MenuItem>
-                <MenuItem value={'inorganico'}>Inorgánico</MenuItem>
-                <MenuItem value={'congelado'}>Congelado</MenuItem>
+                <MenuItem value={'Todos'}>Todos</MenuItem>
+                <MenuItem value={'Pendiente'}>Pendiente</MenuItem>
+                <MenuItem value={'En proceso'}>En proceso</MenuItem>
+                <MenuItem value={'Finalizado'}>Finalizado</MenuItem>
               </CustomSelect>
 						</Grid>
 					</Grid>

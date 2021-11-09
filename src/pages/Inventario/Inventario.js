@@ -25,20 +25,26 @@ const Inventario = () => {
   
   useEffect(() => {
     axios.get(process.env.REACT_APP_API_URL + "/handlingUnits").then((r) => {
-      console.log(r.data);
       setUnidadesManipulacion(r.data);
       setFiltered(r.data);
     });
+
+    const interval = setInterval(() => {
+      axios.get(`${process.env.REACT_APP_API_URL}/handlingUnits`).then((r) => {
+        setUnidadesManipulacion(r.data);
+      });
+    }, 5000);
+    return () => clearInterval(interval);
   }, [])
 
   useEffect(() => {
     if(!unidadesManipulacion) return;
     search();
     //  eslint-disable-next-line
-  }, [statusSelected, productSearch, UMSearch]);
+  }, [statusSelected, productSearch, UMSearch, unidadesManipulacion]);
   
   const columns = [
-    { field: "id", headerName: "# UM", flex: 1, headerAlign: 'center', align: 'center', valueFormatter: (data) => data.value.substring(21, 24)},
+    { field: "handlingUnitId", headerName: "# UM", flex: 1, headerAlign: 'center', align: 'center'},
     { field: "productCode", headerName: "Producto", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.product.code},
     { field: "productClasification", headerName: "Clasificación", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.product.clasification},
     { field: "location", headerName: "Ubicación", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.location ? 
@@ -52,10 +58,9 @@ const Inventario = () => {
 
   const search = () => {
     let query = unidadesManipulacion;
-    console.log(query);
     query = query.filter((unidadManipulacion) => statusSelected === 'Todos' || unidadManipulacion.status === statusSelected);
     query = query.filter((unidadManipulacion) => unidadManipulacion.product.code.includes(productSearch));
-    query = query.filter((unidadManipulacion) => unidadManipulacion.id.includes(UMSearch));
+    query = query.filter((unidadManipulacion) => unidadManipulacion.handlingUnitId.toString().includes(UMSearch));
     setFiltered(query);
   }
 
@@ -68,7 +73,7 @@ const Inventario = () => {
   const asignacionGRASP = async () => {
     if (selectionModel.length) {
       setLoading(true);
-      await axios.post(`${process.env.REACT_APP_API_URL}/handlingUnits/graspAssignation`, {data: selectionModel}).then((r) => {
+      await axios.post(`${process.env.REACT_APP_API_URL}/handlingUnits/graspAssignationTransport`, {data: selectionModel}).then((r) => {
         const length = r.data.length;
         setAlert({isOpen: true, message: `Se asign${length > 1 ? 'aron' : 'ó'} ${length} unidad${length > 1 ? 'es' : ''} de manera exitosa.`, type: 'success'})
       })
@@ -115,12 +120,14 @@ const Inventario = () => {
 							<CustomTextField value={productSearch} title="Producto" onChange={(e) => setProductSearch(e.target.value)}/>
               <CustomSelect value={statusSelected} onChange={(e) => setStatusSelected(e.target.value)} title="Estado">
                 <MenuItem value={'Todos'}>Todos</MenuItem>
+                <MenuItem value={'En inspección'}>En inspección</MenuItem>
                 <MenuItem value={'Registrado'}>Registrado</MenuItem>
-                <MenuItem value={'Asignado'}>Asignado</MenuItem>
-                <MenuItem value={'EnTránsito'}>En tránsito</MenuItem>
-                <MenuItem value={'Disponible'}>Disponible</MenuItem>
+                <MenuItem value={'Por ingresar'}>Por ingresar</MenuItem>
+                <MenuItem value={'Libre disponibilidad'}>Libre disponibilidad</MenuItem>
                 <MenuItem value={'Reservado'}>Reservado</MenuItem>
+                <MenuItem value={'Por despachar'}>Por despachar</MenuItem>
                 <MenuItem value={'Despachado'}>Despachado</MenuItem>
+                <MenuItem value={'Observado'}>Observado</MenuItem>
               </CustomSelect>
 						</Grid>
 					</Grid>

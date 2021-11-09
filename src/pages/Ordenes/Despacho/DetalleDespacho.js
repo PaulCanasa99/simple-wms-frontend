@@ -13,6 +13,7 @@ import CustomSnackbar from '../../../components/CustomSnackbar';
 
 const columns = [
   { field: "posNumber", headerName: "Posición", flex: 0.5, headerAlign: 'center', align: 'center'},
+  { field: "handlingUnitId", headerName: "# UM", flex: 0.5, headerAlign: 'center', align: 'center'},
   { field: "productCode", headerName: "Código", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.product.code},
   { field: "productName", headerName: "Nombre", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.product.name},
   { field: "status", headerName: "Estado", flex: 1, headerAlign: 'center', align: 'center'}
@@ -33,6 +34,15 @@ const DetalleDespacho = () => {
         ({...handlingUnit, posNumber: index + 1}));
       setOrder(inboundOrder);
     });
+    const interval = setInterval(() => {
+      axios.get(`${process.env.REACT_APP_API_URL}/outboundOrders/${params.idOrden}`).then((r) => {
+        const inboundOrder = r.data;
+        inboundOrder.handlingUnits = inboundOrder.handlingUnits.map((handlingUnit, index) => 
+          ({...handlingUnit, posNumber: index + 1}));
+        setOrder(inboundOrder);
+      });
+    }, 5000);
+    return () => clearInterval(interval);
   }, [params.idOrden]);
 
   const despacho = async () => {
@@ -77,7 +87,7 @@ const DetalleDespacho = () => {
           <Grid item xs={12} mt={3}>
             <Grid container p={3} sx={{boxShadow: 3, borderRadius: 1}} bgcolor='white'>
               <Grid item xs={6} p={'0px 100px'}>
-                <DetailHeader label='# Pedido:' value={order._id}/>
+                <DetailHeader label='# Orden:' value={order.outboundOrderId}/>
                 <DetailHeader label='Fecha de registro:' value={moment(order.date).format('D [de] MMMM YYYY')}/>
                 <DetailHeader label='Estado:' value={order.status}/>
               </Grid>
