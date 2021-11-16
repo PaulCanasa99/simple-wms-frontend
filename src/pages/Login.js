@@ -1,20 +1,35 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Button, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import { UserContext } from "../context/Context";
 import { Box } from "@mui/system";
-import React, {useState} from "react";
-import { useNavigate } from "@reach/router"
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "@reach/router";
+import CustomSnackbar from '../components/CustomSnackbar';
+import axios from "axios";
 
 const Login = () => {
-
+  const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const { setUserToken } = useContext(UserContext);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    setUserToken(null);
+    // eslint-disable-next-line
+  }, []);
+
   const handleLogin = () => {
-    navigate('almacen');
+    axios.post(`${process.env.REACT_APP_API_URL}/warehouseWorkers/authenticate`, {data: {email: username, password: password}})
+    .then((r) => {
+      console.log(r);
+      setUserToken(r.data);
+      navigate('almacen');
+    })
+    .catch(() => setAlert({isOpen: true, message: 'Credenciales incorrectas', type: 'error'}))
   };
 
   return (
@@ -66,6 +81,7 @@ const Login = () => {
           Ingresar
         </Button>
       </Box>
+      <CustomSnackbar alert={alert} setAlert={setAlert}/>
     </Box>
   );
 };

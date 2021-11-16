@@ -12,31 +12,49 @@ import { useNavigate } from "@reach/router"
 
 const columns = [
   { field: "id", headerName: "# Orden", flex: 1, headerAlign: 'center', align: 'center'},
+  { field: "type", headerName: "Tipo de movimiento", flex: 1, headerAlign: 'center', align: 'center'},
   // { field: "productName", headerName: "Código", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.product.name},
   { field: "date", headerName: "Fecha", flex: 1.5, headerAlign: 'center', align: 'center', valueFormatter: (data) => moment(data.value).format('D [de] MMMM YYYY')},
   { field: "quantityUM", headerName: "Cantidad UM", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.handlingUnits.length},
   // { field: "stock", headerName: "Stock disponible UM", flex: 1, headerAlign: 'center', align: 'center', renderCell: (data) => data.row.product.name},
 ];
-
-const groupByArray = (xs, key) => {
+const groupByArray = (xs, key, type) => { 
   return xs.reduce(function (rv, x) { 
-    let v = key instanceof Function ? key(x) : x[key]; let el = rv.find((r) => r && r.key === v);
-    if (el) { el.values.push(x); } 
-    else {
-      rv.push({ ...v, handlingUnits: [x]});
-    }
-    return rv;
-  }, [])
+    let v = key instanceof Function ? key(x) : x[key]['id'];
+    console.log(x); 
+    let el = rv.find((r) => r && r.key === v);
+    if (el) el.handlingUnits.push(x);
+    else rv.push({ key: v, handlingUnits: [x], date: type === 'Ingreso' ? x.inboundOrder.date : x.outboundOrder.date, id: type === 'Ingreso' ? x.inboundOrder.inboundOrderId : x.outboundOrder.outboundOrderId, type: type });
+    return rv; 
+  }, []); 
 }
+
+// const groupByArray = (xs, key) => {
+//   return xs.reduce(function (rv, x) { 
+//     let v = key instanceof Function ? key(x) : x[key]; let el = rv.find((r) => r && r.key === v);
+//     if (el) { el.values.push(x); } 
+//     else {
+//       rv.push({ ...v, handlingUnits: [x]});
+//     }
+//     return rv;
+//   }, [])
+// }
 
 const Kardex = () => {
   
   const [product, setProduct] = useState();
   const [orders, setOrders] = useState();
   const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [endDate, setEndDate] = useState();
   const params = useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const date = new Date();
+    date.setDate(date.getDate() - 7);
+    setStartDate(date);
+    setEndDate(new Date());
+  }, []);
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/products/${params.idProducto}`).then((r) => {
@@ -46,12 +64,15 @@ const Kardex = () => {
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/handlingUnits/${params.idProducto}`).then((r) => {
-      setOrders(groupByArray(r.data, 'inboundOrder'));
-      console.log(r.data);
-      // console.log(groupByArray(r.data, 'inboundOrder'));
-      // console.log(groupByArray(r.data, 'outboundOrder'));
+      const inboundOrders = groupByArray(r.data, 'inboundOrder', 'Ingreso');
+      let outboundOrders = r.data.filter((handlingUnit) => handlingUnit.outboundOrder);
+      outboundOrders = groupByArray(outboundOrders, 'outboundOrder', 'Despacho');
+      let ordersAux = inboundOrders.concat(outboundOrders);
+      ordersAux = ordersAux.filter((order) => new Date(order.date) >= startDate && new Date(order.date) <= endDate);
+      ordersAux.sort((a, b) => a.id - b.id);
+      setOrders(ordersAux);
     });
-  }, [params.idProducto]);
+  }, [params.idProducto, startDate, endDate]);
 
   if (orders) 
   return (
@@ -116,6 +137,9 @@ const Kardex = () => {
                 rows={orders}
                 columns={columns}
                 pageSize={10}
+                getRowClassName={(params) => 
+                  params.row.type === 'Ingreso' ? 'inboundOrder' : 'outboundOrder'
+                }
                 />
 						</Box>
 					</Grid>

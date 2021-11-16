@@ -3,6 +3,16 @@ import { styled } from '@mui/system';
 
 export const CustomDataGrid = styled(DataGrid)(({theme}) => ({
 	borderWidth: `0px !important`,
+  '& .inboundOrder': {
+    '& .MuiDataGrid-cell': {
+      backgroundColor: '#97FCA1 !important',
+    },
+  },
+  '& .outboundOrder': {
+    '& .MuiDataGrid-cell': {
+      backgroundColor: '#FE988C !important',
+    },
+  },
 	'& .MuiDataGrid-row:nth-child(odd)': {
 		'& .MuiDataGrid-cell': {
 			backgroundColor: theme.palette.white,

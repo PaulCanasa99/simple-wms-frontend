@@ -40,6 +40,8 @@ const theme = createTheme (
       },
       white: "#ffffff",
       black: "#000000",
+      green: '#97FCA1',
+      red: '#FE988C',
     },
     shape: {
       borderRadius: 5,
