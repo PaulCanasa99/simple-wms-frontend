@@ -4,13 +4,14 @@ import React, { useEffect, useState } from "react";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import RestoreIcon from '@mui/icons-material/Restore';
 import SummarizeIcon from '@mui/icons-material/Summarize';
-import EditIcon from '@mui/icons-material/Edit';
 import { CustomDataGrid } from '../../styles/CustomDataGrid';
 import { CustomTextField } from '../../styles/CustomTextField';
 import { CustomSelect } from '../../styles/CustomSelect';
 import axios from "axios";
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import { useNavigate } from "@reach/router"
+import SwapVertIcon from '@mui/icons-material/SwapVert';
+import ProductoResumen from '../../components/ProductoResumen';
 
 const Productos = () => {
   const [productos, setProductos] = useState();
@@ -20,6 +21,8 @@ const Productos = () => {
   const [nameSearch, setNameSearch] = useState('');
   const [rotationSelected, setRotationSelected] = useState('Todos');
   const [clasificationSelected, setClasificationSelected] = useState('Todos');
+  const [open, setOpen] = useState(false);
+  const [productoSelected, setProductoSelected] = useState(false);
 
   const columns = [
     { field: "code", headerName: "Código", flex: 1, headerAlign: 'center', align: 'center'},
@@ -27,9 +30,9 @@ const Productos = () => {
     { field: "productsPerHU", headerName: "Productos por unidad", flex: 1, headerAlign: 'center', align: 'center'},
     { field: "rotation", headerName: "Rotación ABC", flex: 1, headerAlign: 'center', align: 'center'},
     { field: "clasification", headerName: "Clasificación", flex: 1, headerAlign: 'center', align: 'center'},
-    { field: 'actions', headerName: "Ver detalle", flex: 1, type: 'actions', getActions: (params) => [
-      <GridActionsCellItem icon={<SummarizeIcon/>} onClick={() => navigate(`productos/${params.id}`)} label="Ver kardex"/>,
-      <GridActionsCellItem icon={<EditIcon/>} onClick={() => navigate(`pedidos/${params.id}`)} label="Editar"/>,
+    { field: 'actions', headerName: "Más información", flex: 1, type: 'actions', getActions: (params) => [
+      <GridActionsCellItem icon={<SwapVertIcon/>} onClick={() => navigate(`productos/${params.id}`)} label="Ver kardex"/>,
+      <GridActionsCellItem icon={<SummarizeIcon/>} onClick={() => handleVerResumen(params)} label="Ver resumen"/>
     ]}
   ];
 
@@ -53,6 +56,11 @@ const Productos = () => {
     query = query.filter((producto) => producto.code.includes(codeSearch));
     query = query.filter((producto) => producto.name.includes(nameSearch));
     setFiltered(query);
+  }
+
+  const handleVerResumen = (producto) => {
+    setOpen(true);
+    setProductoSelected(producto);
   }
 
   const clear = () => {
@@ -122,6 +130,7 @@ const Productos = () => {
 						</Box>
 					</Grid>
 				</Grid>
+        <ProductoResumen open={open} setOpen={setOpen} productoSelected={productoSelected}/>
       </Container>
     );
 
