@@ -1,0 +1,142 @@
+{
+  "app": {
+    "title": "SimpleWMS",
+    "demoBanner": "Modo demo: las acciones modifican datos simulados en tu navegador.",
+    "demoBannerCta": "Reiniciar datos"
+  },
+  "nav": {
+    "warehouse": "Almacén",
+    "inventory": "Inventario",
+    "salesOrders": "Pedidos",
+    "products": "Productos",
+    "operations": "Órdenes",
+    "inbound": "Ingreso",
+    "transport": "Transporte",
+    "outbound": "Despacho",
+    "logout": "Cerrar sesión",
+    "language": "Idioma"
+  },
+  "login": {
+    "title": "Inicia sesión en SimpleWMS",
+    "username": "Usuario o correo electrónico",
+    "password": "Contraseña",
+    "submit": "Ingresar",
+    "demoHint": "Usa cualquier correo y contraseña para entrar en modo demo.",
+    "error": "Credenciales incorrectas"
+  },
+  "common": {
+    "all": "Todos",
+    "search": "Buscar",
+    "clearFilters": "Limpiar filtros",
+    "back": "Volver",
+    "details": "Ver detalle",
+    "loading": "Cargando…",
+    "empty": "Sin resultados",
+    "actions": "Acciones",
+    "status": "Estado",
+    "date": "Fecha",
+    "registeredOn": "Fecha de registro",
+    "code": "Código",
+    "name": "Nombre",
+    "rotation": "Rotación ABC",
+    "clasification": "Clasificación",
+    "position": "Posición",
+    "quantity": "Cantidad",
+    "type": "Tipo"
+  },
+  "warehouse": {
+    "title": "Almacén",
+    "receptionDispatch": "Zona de recepción y despacho",
+    "available": "Disponible",
+    "partial": "Parcialmente ocupado",
+    "occupied": "Ocupado",
+    "occupiedLocations": "Ubicaciones ocupadas",
+    "panelTitle": "Estado",
+    "inInspection": "Unidades en inspección",
+    "toReceive": "Unidades a recepcionar",
+    "toDispatch": "Unidades a despachar",
+    "freeLocations": "Ubicaciones libres",
+    "occupied2": "Ubicaciones ocupadas",
+    "totalLocations": "Ubicaciones en total",
+    "rackTitle": "Almacén - Estantería {{rack}}",
+    "back": "Volver a almacén",
+    "huNumber": "# UM",
+    "productCode": "Código producto",
+    "productName": "Nombre producto"
+  },
+  "inventory": {
+    "title": "Inventario",
+    "assignLocations": "Asignar ubicaciones",
+    "huNumber": "# UM",
+    "product": "Producto",
+    "location": "Ubicación",
+    "entryDate": "Fecha de ingreso",
+    "expirationDate": "Fecha de expiración",
+    "selectAtLeastOne": "Debe seleccionar una unidad por lo menos",
+    "assignedSuccess_one": "Se asignó {{count}} unidad de manera exitosa.",
+    "assignedSuccess_other": "Se asignaron {{count}} unidades de manera exitosa."
+  },
+  "products": {
+    "title": "Productos",
+    "perHU": "Productos por unidad",
+    "moreInfo": "Más información",
+    "viewLedger": "Ver kardex",
+    "viewSummary": "Ver resumen"
+  },
+  "summary": {
+    "title": "Resumen - {{code}}"
+  },
+  "ledger": {
+    "title": "Reporte Kardex",
+    "back": "Ver productos",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de fin",
+    "movement": "Tipo de movimiento",
+    "huQuantity": "Cantidad UM",
+    "type": {
+      "Ingreso": "Ingreso",
+      "Despacho": "Despacho"
+    }
+  },
+  "salesOrders": {
+    "title": "Pedidos",
+    "upload": "Cargar pedidos",
+    "uploadSuccess": "Pedidos cargados de manera exitosa.",
+    "orderId": "# Pedido",
+    "customer": "Cliente",
+    "huQuantity": "Cantidad unidades",
+    "detailTitle": "Pedido",
+    "dispatch": "Despachar unidades",
+    "back": "Ver pedidos",
+    "selectionSuccess": "Selección de unidades a despachar exitosa.",
+    "contactName": "Nombre del contacto",
+    "contactPhone": "Teléfono del contacto",
+    "address": "Dirección",
+    "stock": "Stock disponible UM"
+  },
+  "inbound": {
+    "title": "Órdenes de ingreso",
+    "upload": "Cargar órdenes de ingreso",
+    "uploadSuccess": "Órdenes cargadas de manera exitosa.",
+    "orderId": "# Orden",
+    "huQuantity": "Cantidad unidades",
+    "detailTitle": "Órden de ingreso",
+    "back": "Ver órdenes de ingreso"
+  },
+  "outbound": {
+    "title": "Órdenes de despacho",
+    "orderId": "# Orden",
+    "linkedOrder": "# Pedido",
+    "huQuantity": "Cantidad unidades",
+    "detailTitle": "Órden de despacho",
+    "dispatch": "Despachar unidades",
+    "back": "Ver órdenes de despacho",
+    "successMessage": "Órdenes de transporte generadas."
+  },
+  "transport": {
+    "title": "Órdenes de transporte",
+    "orderId": "# Orden",
+    "huNumber": "# UM",
+    "product": "Producto"
+  }
+}

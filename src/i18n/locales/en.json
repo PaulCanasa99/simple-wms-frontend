@@ -1,0 +1,142 @@
+{
+  "app": {
+    "title": "SimpleWMS",
+    "demoBanner": "Demo mode: actions update mock data stored in your browser.",
+    "demoBannerCta": "Reset demo data"
+  },
+  "nav": {
+    "warehouse": "Warehouse",
+    "inventory": "Inventory",
+    "salesOrders": "Sales orders",
+    "products": "Products",
+    "operations": "Operations",
+    "inbound": "Inbound",
+    "transport": "Transport",
+    "outbound": "Outbound",
+    "logout": "Sign out",
+    "language": "Language"
+  },
+  "login": {
+    "title": "Sign in to SimpleWMS",
+    "username": "Email or username",
+    "password": "Password",
+    "submit": "Sign in",
+    "demoHint": "Use any email and password to enter demo mode.",
+    "error": "Invalid credentials"
+  },
+  "common": {
+    "all": "All",
+    "search": "Search",
+    "clearFilters": "Clear filters",
+    "back": "Back",
+    "details": "View detail",
+    "loading": "Loading…",
+    "empty": "No results",
+    "actions": "Actions",
+    "status": "Status",
+    "date": "Date",
+    "registeredOn": "Registered on",
+    "code": "Code",
+    "name": "Name",
+    "rotation": "ABC rotation",
+    "clasification": "Classification",
+    "position": "Position",
+    "quantity": "Quantity",
+    "type": "Type"
+  },
+  "warehouse": {
+    "title": "Warehouse",
+    "receptionDispatch": "Reception and dispatch zone",
+    "available": "Available",
+    "partial": "Partially occupied",
+    "occupied": "Occupied",
+    "occupiedLocations": "Occupied locations",
+    "panelTitle": "Status",
+    "inInspection": "Units in inspection",
+    "toReceive": "Units to receive",
+    "toDispatch": "Units to dispatch",
+    "freeLocations": "Free locations",
+    "occupied2": "Occupied locations",
+    "totalLocations": "Total locations",
+    "rackTitle": "Warehouse - Rack {{rack}}",
+    "back": "Back to warehouse",
+    "huNumber": "HU #",
+    "productCode": "Product code",
+    "productName": "Product name"
+  },
+  "inventory": {
+    "title": "Inventory",
+    "assignLocations": "Assign locations",
+    "huNumber": "HU #",
+    "product": "Product",
+    "location": "Location",
+    "entryDate": "Entry date",
+    "expirationDate": "Expiration date",
+    "selectAtLeastOne": "Select at least one unit.",
+    "assignedSuccess_one": "{{count}} unit assigned successfully.",
+    "assignedSuccess_other": "{{count}} units assigned successfully."
+  },
+  "products": {
+    "title": "Products",
+    "perHU": "Products per HU",
+    "moreInfo": "More info",
+    "viewLedger": "View ledger",
+    "viewSummary": "View summary"
+  },
+  "summary": {
+    "title": "Summary - {{code}}"
+  },
+  "ledger": {
+    "title": "Kardex report",
+    "back": "Back to products",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "movement": "Movement type",
+    "huQuantity": "HU quantity",
+    "type": {
+      "Ingreso": "Inbound",
+      "Despacho": "Outbound"
+    }
+  },
+  "salesOrders": {
+    "title": "Sales orders",
+    "upload": "Upload orders",
+    "uploadSuccess": "Orders uploaded successfully.",
+    "orderId": "Order #",
+    "customer": "Customer",
+    "huQuantity": "HU quantity",
+    "detailTitle": "Order",
+    "dispatch": "Dispatch units",
+    "back": "Back to orders",
+    "selectionSuccess": "Units selected for dispatch.",
+    "contactName": "Contact name",
+    "contactPhone": "Contact phone",
+    "address": "Address",
+    "stock": "Available HU stock"
+  },
+  "inbound": {
+    "title": "Inbound orders",
+    "upload": "Upload inbound orders",
+    "uploadSuccess": "Inbound orders uploaded successfully.",
+    "orderId": "Order #",
+    "huQuantity": "HU quantity",
+    "detailTitle": "Inbound order",
+    "back": "Back to inbound orders"
+  },
+  "outbound": {
+    "title": "Outbound orders",
+    "orderId": "Order #",
+    "linkedOrder": "Sales order #",
+    "huQuantity": "HU quantity",
+    "detailTitle": "Outbound order",
+    "dispatch": "Dispatch units",
+    "back": "Back to outbound orders",
+    "successMessage": "Transport orders generated."
+  },
+  "transport": {
+    "title": "Transport orders",
+    "orderId": "Order #",
+    "huNumber": "HU #",
+    "product": "Product"
+  }
+}
